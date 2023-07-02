@@ -8,22 +8,24 @@ export default function App() {
 function FarAway() {
   return (
     <>
-      <div className="h-screen bg-red-500">
+      <div className="h-screen">
         <div className="flex justify-center py-6 bg-[#f4a226]">
           <img
-            className="text-xl w-16"
+            className="text-xl w-16 md:w-20 lg:w-24 2xl:w-28 "
             src="https://img.icons8.com/?size=512&id=IpVaMIwgOHza&format=png"
             alt="tree"
           />
-          <div className="font-monoton text-center text-4xl  p-6">Far Away</div>
+          <div className="font-monoton text-center 2xl:text-8xl lg:text-6xl text-4xl md:text-5xl select-none  p-6">
+            Far Away
+          </div>
           <img
-            className="text-xl w-16"
+            className="text-xl w-16 md:w-20 lg:w-24 2xl:w-28 "
             src="https://img.icons8.com/?size=512&id=5i9qZuhkTieo&format=png"
             alt="baggage"
           />
         </div>
-        <div className="bg-[#e5771f] py-10 flex flex-col justify-center items-center">
-          <p className="font-quicksand text-center p-6 text-xl select-none font-bold">
+        <div className="bg-[#e5771f] 2xl:py-8 2xl:flex-row 2xl:space-x-10 py-10 flex flex-col justify-center items-center">
+          <p className="font-quicksand text-center xl:text-2xl p-6 text-xl select-none font-bold">
             what do you need for this trip 😍?
           </p>
           <div className="flex justify-center gap-6">
@@ -63,8 +65,8 @@ function FarAway() {
         </div>
         {/* results */}
         <div className=" flex-col pb-4 py-10 bg-[#5a3e2b] select-none flex gap-12">
-          <div className="text-[#ffebb3]  grid  grid-cols-2  mx-auto gap-6 p-1 text-xl font-quicksand font-bold ">
-            <div className="flex space-x-3">
+          <div className="text-[#ffebb3]  grid   xl:grid-cols-4 2xl:grid-cols-6 grid-cols-2 lg:grid-cols-3  mx-auto gap-6 p-1 text-xl font-quicksand font-bold ">
+            {/* <div className="flex space-x-3">
               <input
                 className="checkbox text-red-500  text-red-500 "
                 type="checkbox"
@@ -127,10 +129,10 @@ function FarAway() {
               />
               <div className="font-quicksand">1 baggage</div>
               <button className="text-red-500 w-4 h-4">x</button>
-            </div>
+            </div> */}
           </div>
-
-          <div className="flex flex-col  mx-auto space-y-1 ">
+          <div className="p-16"></div>
+          <div className="flex lg:flex-row lg:space-x-8 lg:space-y-0 flex-col  mx-auto space-y-1 ">
             <select className="border-none outline-none p-2 bg-[#ffebb3] placeholder:text-gray-500 rounded-r-full px-6 rounded-l-full">
               <option>SORT BY INPUT ORDER</option>
               <option>SORT BY DESCRIPTION</option>
@@ -141,7 +143,7 @@ function FarAway() {
             </button>
           </div>
         </div>
-        <div className="bg-[#76c7ad] h-[25%]">
+        <div className="bg-[#76c7ad] py-[1rem]">
           <div>
             <div className="flex pt-4 pl-4 space-x-2 justify-start items-start">
               <img
@@ -157,12 +159,12 @@ function FarAway() {
               />
             </div>
             <div
-              className="text-center text-green-900
+              className="text-center text-green-900 py-10
             font-bold font-quicksand flex justify-center
             items-center place-items-center
-            pt-16 text-xl w-[90%] mx-auto leading-[2rem]"
+            pt-16 text-xl w-[90%] lg:text-2xl xl:text-3xl mx-auto leading-[2rem]"
             >
-              you have 1 items on your list, and you already packed 0 (0%)
+              you have 0 items on your list, and you already packed 0 (0%)
             </div>
           </div>
         </div>
