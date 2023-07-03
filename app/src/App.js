@@ -11,12 +11,29 @@ export default function App() {
   function ParentComponents(newitems) {
     setData((data) => [...data, newitems]);
   }
+  function DeleteItemsFunction(id) {
+    console.log(id);
+    setData((data) => data.filter((itsm) => itsm.id !== id));
+  }
+
+  function ToggleItems(id) {
+    setData((data) =>
+      data.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
+  }
   return (
     <div>
       <Menu />
       <Form form={ParentComponents} />
-      <Result result={data} />
-      <Footer />
+      {/* props */}
+      <Result
+        result={data}
+        DeleteItemsProps={DeleteItemsFunction}
+        toggleProps={ToggleItems}
+      />
+      <Footer items={data} />
     </div>
   );
 }
@@ -98,23 +115,38 @@ function Form({ form }) {
   );
 }
 
-function Result({ result }) {
+function Item({ item, DeleteItemsProps, toggleProps }) {
+  return (
+    <div className="flex space-x-2">
+      <input
+        onChange={() => toggleProps(item.id)}
+        value={item.packed}
+        className="checkbox font-quciksand text-red-500  text-red-500 "
+        type="checkbox"
+      />
+      <div className={`flex space-x-3 ${item.packed ? "line-through" : {}}`}>
+        {item.count} {item.des}
+      </div>
+      <button
+        onClick={() => DeleteItemsProps(item.id)}
+        className="text-red-500 w-4 h-4"
+      >
+        x
+      </button>
+    </div>
+  );
+}
+function Result({ result, DeleteItemsProps, toggleProps }) {
   return (
     <div className=" flex-col pb-4 py-10 bg-[#5a3e2b] select-none flex gap-12">
-      <div className="text-[#ffebb3]  grid   xl:grid-cols-4 2xl:grid-cols-6 grid-cols-2 lg:grid-cols-3  mx-auto gap-6 p-1 text-xl font-quicksand font-bold ">
+      <div className="text-[#ffebb3] gap-x-24  grid   xl:grid-cols-4 2xl:grid-cols-6 grid-cols-2 lg:grid-cols-3  mx-auto gap-6 p-1 text-xl font-quicksand font-bold ">
         {result.map((item) => (
-          <div
-            className={`flex space-x-3 ${item.packed ? "line-through" : {}}`}
-          >
-            <input
-              className="checkbox font-quciksand text-red-500  text-red-500 "
-              type="checkbox"
-            />
-            <div className="">
-              {item.count} {item.des}
-            </div>
-            <button className="text-red-500 w-4 h-4">x</button>
-          </div>
+          <Item
+            item={item}
+            key={item.id}
+            DeleteItemsProps={DeleteItemsProps}
+            toggleProps={toggleProps}
+          />
         ))}
       </div>
       <div className="p-16"></div>
@@ -131,7 +163,10 @@ function Result({ result }) {
     </div>
   );
 }
-function Footer() {
+function Footer({ items }) {
+  const counter = items.length;
+  const packedItemsCounter = items.filter((item) => item.packed).length;
+
   return (
     <div className="bg-[#76c7ad] py-[1rem]">
       <div>
@@ -154,7 +189,10 @@ function Footer() {
             items-center place-items-center
             pt-16 text-xl w-[90%] lg:text-2xl xl:text-3xl mx-auto leading-[2rem]"
         >
-          you have 0 items on your list, and you already packed 0 (0%)
+          {`you have ${counter} items on your list, and you already packed  ${packedItemsCounter} (${(
+            (Number(packedItemsCounter) / Number(counter)) *
+            100
+          ).toFixed(1)}%)`}
         </div>
       </div>
     </div>
