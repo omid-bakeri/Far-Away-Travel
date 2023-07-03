@@ -8,6 +8,12 @@ import { useState } from "react";
 export default function App() {
   const [data, setData] = useState([]);
 
+  function checkClearConfirm() {
+    const confrim = window.confirm("Do you want to clear All items?");
+    if (confrim) {
+      handleClearAllElementFunction();
+    }
+  }
   function ParentComponents(newitems) {
     setData((data) => [...data, newitems]);
   }
@@ -16,6 +22,9 @@ export default function App() {
     setData((data) => data.filter((itsm) => itsm.id !== id));
   }
 
+  function handleClearAllElementFunction() {
+    setData([]);
+  }
   function ToggleItems(id) {
     setData((data) =>
       data.map((item) =>
@@ -32,6 +41,8 @@ export default function App() {
         result={data}
         DeleteItemsProps={DeleteItemsFunction}
         toggleProps={ToggleItems}
+        handleClearAllElement={handleClearAllElementFunction}
+        checkClearConfirm={checkClearConfirm}
       />
       <Footer items={data} />
     </div>
@@ -136,7 +147,13 @@ function Item({ item, DeleteItemsProps, toggleProps }) {
     </div>
   );
 }
-function Result({ result, DeleteItemsProps, toggleProps }) {
+function Result({
+  result,
+  DeleteItemsProps,
+  toggleProps,
+  handleClearAllElement,
+  checkClearConfirm,
+}) {
   return (
     <div className=" flex-col pb-4 py-10 bg-[#5a3e2b] select-none flex gap-12">
       <div className="text-[#ffebb3] gap-x-24  grid   xl:grid-cols-4 2xl:grid-cols-6 grid-cols-2 lg:grid-cols-3  mx-auto gap-6 p-1 text-xl font-quicksand font-bold ">
@@ -156,7 +173,10 @@ function Result({ result, DeleteItemsProps, toggleProps }) {
           <option>SORT BY DESCRIPTION</option>
           <option>SORT BY PACKED STATUS</option>
         </select>
-        <button className="border-none outline-none p-2 bg-[#ffebb3] placeholder:text-gray-500 rounded-r-full px-6 rounded-l-full">
+        <button
+          onClick={() => checkClearConfirm()}
+          className="border-none outline-none p-2 bg-[#ffebb3] placeholder:text-gray-500 rounded-r-full px-6 rounded-l-full"
+        >
           CLEAR ALL
         </button>
       </div>
@@ -164,9 +184,11 @@ function Result({ result, DeleteItemsProps, toggleProps }) {
   );
 }
 function Footer({ items }) {
-  const counter = items.length;
-  const packedItemsCounter = items.filter((item) => item.packed).length;
+  const counter = Number(items.length);
+  const packedItemsCounter = Number(items.filter((item) => item.packed).length);
 
+  const packedPercent = Number((packedItemsCounter / counter) * 100).toFixed(1);
+  console.log(packedPercent);
   return (
     <div className="bg-[#76c7ad] py-[1rem]">
       <div>
@@ -184,15 +206,18 @@ function Footer({ items }) {
           />
         </div>
         <div
-          className="text-center text-green-900 py-10
+          className={`text-center text-green-900 py-10 ${
+            packedPercent == 100.0 ? "text-red-600" : {}
+          }
             font-bold font-quicksand flex justify-center
             items-center place-items-center
-            pt-16 text-xl w-[90%] lg:text-2xl xl:text-3xl mx-auto leading-[2rem]"
+            pt-16 text-xl w-[90%] lg:text-2xl xl:text-3xl mx-auto leading-[2rem]`}
         >
-          {`you have ${counter} items on your list, and you already packed  ${packedItemsCounter} (${(
-            (Number(packedItemsCounter) / Number(counter)) *
-            100
-          ).toFixed(1)}%)`}
+          {packedPercent == 100.0
+            ? `You got everything! Ready to go ✈`
+            : `you have ${counter} items on your list, and you already packed ${packedItemsCounter} (${Number(
+                packedPercent
+              )}%)`}
         </div>
       </div>
     </div>
