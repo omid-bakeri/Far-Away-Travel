@@ -1,16 +1,21 @@
 import { useState } from "react";
 
-const Data = [
-  { id: 1, name: "baggage", packed: true, count: 2 },
-  { id: 2, name: "passport", packed: true, count: 1 },
-  { id: 3, name: "socks", packed: false, count: 3 },
-];
+// const Data = [
+//   { id: 1, name: "baggage", packed: true, count: 2 },
+//   { id: 2, name: "passport", packed: true, count: 1 },
+//   { id: 3, name: "socks", packed: false, count: 3 },
+// ];
 export default function App() {
+  const [data, setData] = useState([]);
+
+  function ParentComponents(newitems) {
+    setData((data) => [...data, newitems]);
+  }
   return (
     <div>
       <Menu />
-      <Form />
-      <Result />
+      <Form form={ParentComponents} />
+      <Result result={data} />
       <Footer />
     </div>
   );
@@ -36,18 +41,20 @@ function Menu() {
   );
 }
 
-function Form() {
+function Form({ form }) {
   const [des, setDes] = useState("");
-  const [count, setCount] = useState();
+  const [count, setCount] = useState(1);
 
   function newItem(e) {
     e.preventDefault();
     if (!des) return;
     const newItems = { id: Date.now(), count, des, packed: false };
     console.log(newItems);
-    setDes("");
-    setCount(1);
+    // setDes("");
+    form(newItems);
+    // setCount(1);
   }
+
   return (
     <div className="bg-[#e5771f] 2xl:py-8 2xl:flex-row 2xl:space-x-10 py-10 flex flex-col justify-center items-center">
       <p className="font-quicksand text-center xl:text-2xl p-6 text-xl select-none font-bold">
@@ -91,11 +98,11 @@ function Form() {
   );
 }
 
-function Result() {
+function Result({ result }) {
   return (
     <div className=" flex-col pb-4 py-10 bg-[#5a3e2b] select-none flex gap-12">
       <div className="text-[#ffebb3]  grid   xl:grid-cols-4 2xl:grid-cols-6 grid-cols-2 lg:grid-cols-3  mx-auto gap-6 p-1 text-xl font-quicksand font-bold ">
-        {Data.map((item) => (
+        {result.map((item) => (
           <div
             className={`flex space-x-3 ${item.packed ? "line-through" : {}}`}
           >
@@ -104,7 +111,7 @@ function Result() {
               type="checkbox"
             />
             <div className="">
-              {item.count} {item.name}
+              {item.count} {item.des}
             </div>
             <button className="text-red-500 w-4 h-4">x</button>
           </div>
